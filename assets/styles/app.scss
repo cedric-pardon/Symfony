@@ -1,20 +1,14 @@
 // assets/styles/global.scss
 
 // customize some Bootstrap variables
-$primary:(#FFFFFF);
-$secondary: (#98B6DA);
-$dark: (#48515B);
+$primary: (#ffffff);
+$secondary: (#98b6da);
+$dark: (#48515b);
 $light: (#676767);
-
-
-
-
-
-
 
 // the ~ allows you to reference things in node_modules
 @import "~bootstrap/scss/bootstrap";
 
 body {
-    background-color: #FFFFFF;
+    background-color: #ffffff;
 }
