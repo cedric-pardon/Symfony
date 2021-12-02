@@ -3,22 +3,28 @@
 {% block title %}All categories {% endblock %}
 
 {% block body %}
-<h1>Liste des catégories : </h1>
-{% for category in categories %}
+<h1 class="text-center">Liste des catégories : </h1>
 
-<div>
-    <h2>Catégorie :</h2>
-    <a href="{{ path('category_show', {categoryName: category.name}) }}">
-        <h3>{{category.name }}</h3>
-    </a>
-</div>
-
-{% else %}
-Aucune catégorie trouvée.
-{% endfor %}
-
-<a href="{{ path('app_index') }}">
-    Retour à l'accueil
-</a>
-
+<main class="container">
+    <div class="row justify-content-center gap-5">
+        {% for category in categories %}
+        <div class="card bg-light mb-3 mb-5 p-0">
+            <div class="card">
+                <div class="card-header">
+                    <h2>Catégorie :</h2>
+                </div>
+                <div class="card-body">
+                    <h3 class="card-title">{{category.name }}</h3>
+                    <a href="{{ path('category_show', { categoryName: category.name }) }}"
+                        class="btn btn-secondary p-2 px-4">
+                        Résumé</a>
+                </div>
+            </div>
+        </div>
+        {% else %}
+        Aucune catégorie trouvée.
+        {% endfor %}
+        <a class="text-dark" href="{{ path('app_index') }}">Retour à l'accueil</a>
+    </div>
+</main>
 {% endblock %}

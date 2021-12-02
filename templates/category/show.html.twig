@@ -1,21 +1,31 @@
 {% extends "base.html.twig" %}
+
 {% block title %} Catégorie {{ categoryName }}{% endblock %}
 
 {% block body %}
-{% for program in programs %}
+<h1 class="text-center">Liste de la catégorie {{ categoryName }} : </h1>
 
-<ul>
-    <li> {{ program.id }} </li>
-    <li> {{ program.title }} </li>
-    <Li>{{ program.summary }}</Li>
-</ul>
-<a href="{{ path('program_show', { id: program.id }) }}">Voir la fiche</a>
-
-{% else %}
-Aucune série trouvé
-{% endfor %}
-
-<a href="{{ path('category_index') }}">Retour à la liste de la catégorie</a>
-
+<main class="container">
+    <div class="row justify-content-center gap-5">
+        {% for program in programs %}
+        <div class="card bg-light mb-3 mb-5 p-0">
+            <div class="card">
+                <div class="card-header">
+                    <h2>Résumé :</h2>
+                </div>
+                <div class="card-body">
+                    <h3 class="card-title">{{ program.id }} </h3>
+                    <h3 class="card-title">{{ program.title }} </h3>
+                    <p>{{ program.summary }}</p>
+                    <a href="{{ path('program_show', { id: program.id }) }}" class="btn btn-secondary p-2 px-4">
+                        Voir le détail de la série</a>
+                </div>
+            </div>
+        </div>
+        {% else %}
+        Aucune catégorie trouvée.
+        {% endfor %}
+        <a class="text-dark" href="{{ path('category_index') }}">Retour à la liste de la catégorie</a>
+    </div>
+</main>
 {% endblock %}
-
