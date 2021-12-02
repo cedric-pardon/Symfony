@@ -1,7 +1,12 @@
 <nav class="navbar navbar-expand-lg navbar-light bg-secondary">
     <div class="container-fluid">
 
-        <div class="navbarWild col col-lg-4">
+        <div class="navbarWild navbar-brand col col-lg-4">
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+                aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
             <img src="{{ asset('build/images/carbon_logo-delicious.svg') }}" alt="logo" width="30" height="30">
             <a class="navbar-brand text-primary" href="/">Wild Séries</a>
         </div>
@@ -9,13 +14,16 @@
         <div class="collapse navbar-collapse col col-lg-5" id="navbarSupportedContent">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
-                        data-bs-toggle="dropdown" aria-expanded="false">
+                    <a class="nav-link" href="{{ path('program_index') }}" id="navbarDropdown" role="button">
+                        Programmes
+                    </a>
+                <li class="nav-item dropdown">
+                    <a class="nav-link" href="{{ path('category_index') }}" id="navbarDropdown" role="button">
                         Catégories
                     </a>
-                    <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <li><a class="dropdown-item" href="{{ path('category_index') }}">Catégories</a></li </ul>
                 </li>
+                </li>
+            </ul>
         </div>
 
         <div class="collapse navbar-collapse col col-lg-3" id="navbarSupportedContent">

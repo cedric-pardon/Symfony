@@ -10,15 +10,15 @@
         {% for program in programs %}
         <div class="card bg-light mb-3 mb-5 p-0">
             <div class="card">
+                <img class="card-img-top" src="{{program.poster}}" alt="{{ program.title }} poster">
                 <div class="card-header">
                     <h2>Résumé :</h2>
                 </div>
                 <div class="card-body">
-                    <h3 class="card-title">{{ program.id }} </h3>
                     <h3 class="card-title">{{ program.title }} </h3>
                     <p>{{ program.summary }}</p>
                     <a href="{{ path('program_show', { id: program.id }) }}" class="btn btn-secondary p-2 px-4">
-                        Voir le détail de la série</a>
+                        Voir le détail</a>
                 </div>
             </div>
         </div>
