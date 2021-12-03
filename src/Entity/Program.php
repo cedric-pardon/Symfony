@@ -2,13 +2,16 @@
 
 namespace App\Entity;
 
-use App\Repository\ProgramRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use App\Repository\ProgramRepository;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * @ORM\Entity(repositoryClass=ProgramRepository::class)
+ * @UniqueEntity(fields="title", message="ce titre existe déjà.")
  */
 class Program
 {
@@ -20,12 +23,20 @@ class Program
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=255, unique=true)
+     * @Assert\NotBlank()
+     * @Assert\Length(max="255")
      */
     private $title;
 
     /**
      * @ORM\Column(type="text")
+     * @Assert\NotBlank()
+     * @Assert\Regex(
+     *     pattern="/plus belle la vie/",
+     *     match=false,
+     *     message="On parle de vraies séries ici")
+     * 
      */
     private $summary;
 
@@ -45,10 +56,17 @@ class Program
      */
     private $seasons;
 
+    /**
+     * @ORM\Column(type="integer")
+     */
+
+    private $year;
+
     public function __construct()
     {
         $this->seasons = new ArrayCollection();
     }
+
 
     public function getId(): ?int
     {
@@ -75,26 +93,33 @@ class Program
     public function setSummary(string $summary): self
     {
         $this->summary = $summary;
+
         return $this;
     }
+
     public function getPoster(): ?string
     {
         return $this->poster;
     }
+
     public function setPoster(string $poster): self
     {
         $this->poster = $poster;
+
         return $this;
     }
+
     public function getCategory(): ?Category
     {
         return $this->category;
     }
+
     public function setCategory(?Category $category): self
     {
         $this->category = $category;
         return $this;
     }
+
     /**
      * @return Collection|Season[]
      */
@@ -102,6 +127,7 @@ class Program
     {
         return $this->seasons;
     }
+
     public function addSeason(Season $season): self
     {
         if (!$this->seasons->contains($season)) {
@@ -110,6 +136,7 @@ class Program
         }
         return $this;
     }
+
     public function removeSeason(Season $season): self
     {
         if ($this->seasons->removeElement($season)) {
@@ -118,6 +145,17 @@ class Program
                 $season->setProgram(null);
             }
         }
+        return $this;
+    }
+
+    public function getYear(): ?int
+    {
+        return $this->year;
+    }
+
+    public function setYear(int $year): self
+    {
+        $this->year = $year;
         return $this;
     }
 }
