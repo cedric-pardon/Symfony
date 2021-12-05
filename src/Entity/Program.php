@@ -2,10 +2,10 @@
 
 namespace App\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
 use App\Repository\ProgramRepository;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
@@ -31,17 +31,17 @@ class Program
 
     /**
      * @ORM\Column(type="text")
+     */
+    private $summary;
+
+    /**
+     * @ORM\Column(type="string", length=255)
      * @Assert\NotBlank()
      * @Assert\Regex(
      *     pattern="/plus belle la vie/",
      *     match=false,
      *     message="On parle de vraies séries ici")
      * 
-     */
-    private $summary;
-
-    /**
-     * @ORM\Column(type="string", length=255)
      */
     private $poster;
 
@@ -59,12 +59,18 @@ class Program
     /**
      * @ORM\Column(type="integer")
      */
-
     private $year;
+
+    /**
+     * @ORM\ManyToMany(targetEntity=Actor::class, mappedBy="programs")
+     */
+    private $actors;
+
 
     public function __construct()
     {
         $this->seasons = new ArrayCollection();
+        $this->actors = new ArrayCollection();
     }
 
 
@@ -117,6 +123,7 @@ class Program
     public function setCategory(?Category $category): self
     {
         $this->category = $category;
+
         return $this;
     }
 
@@ -134,6 +141,7 @@ class Program
             $this->seasons[] = $season;
             $season->setProgram($this);
         }
+
         return $this;
     }
 
@@ -145,6 +153,7 @@ class Program
                 $season->setProgram(null);
             }
         }
+
         return $this;
     }
 
@@ -156,6 +165,29 @@ class Program
     public function setYear(int $year): self
     {
         $this->year = $year;
+
         return $this;
+    }
+
+    /**
+     * @return Collection|Actor[]
+     */
+    public function getActors(): Collection
+    {
+        return $this->actors;
+    }
+
+    public function addActor(Actor $actor)
+    {
+
+        if ($this->actors->contains($actor)) {
+            return;
+        }
+        $this->actors[] = $actor;
+    }
+
+    public function removeActor(Actor $actor)
+    {
+        $this->actors->removeElement($actor);
     }
 }
