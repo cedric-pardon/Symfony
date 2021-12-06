@@ -8,10 +8,10 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-class ActorController extends AbstractController
 /**
  * @Route("/actor", name="actor_")
  */
+class ActorController extends AbstractController
 {
     /**
      * @Route("/", name="index")
@@ -25,6 +25,7 @@ class ActorController extends AbstractController
             'actors' => $actors
         ]);
     }
+
     /**
      *
      * @Route("/{id<^[0-9]+$>}", name="show")
@@ -32,15 +33,13 @@ class ActorController extends AbstractController
      */
     public function show(Actor $actor): Response
     {
-        $programs = $this->getDoctrine()->getRepository(Program::class)->find($actor);
-    
-        if (!$programs) {
+        $programs = $actor->getPrograms();
+        if ($programs->isEmpty()) {
             throw $this->createNotFoundException(
                 'No program found . '
             );
         }
         return $this->render('actor/show.html.twig', [
-
             'actor' => $actor,
             'programs' => $programs,
         ]);
