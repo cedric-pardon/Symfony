@@ -177,17 +177,22 @@ class Program
         return $this->actors;
     }
 
-    public function addActor(Actor $actor)
+    public function addActor(Actor $actor): self
     {
-
-        if ($this->actors->contains($actor)) {
-            return;
+        if (!$this->actors->contains($actor)) {
+            $this->actors[] = $actor;
+            $actor->addProgram($this);
         }
-        $this->actors[] = $actor;
+
+        return $this;
     }
 
-    public function removeActor(Actor $actor)
+    public function removeActor(Actor $actor): self
     {
-        $this->actors->removeElement($actor);
+        if ($this->actors->removeElement($actor)) {
+            $actor->removeProgram($this);
+        }
+
+        return $this;
     }
 }
