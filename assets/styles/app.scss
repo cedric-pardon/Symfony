@@ -8,9 +8,15 @@ $light: (#676767);
 
 // the ~ allows you to reference things in node_modules
 @import "~bootstrap/scss/bootstrap";
+@import url('https://fonts.googleapis.com/css2?family=Salsa&display=swap');
 
 body {
     background-color: #ffffff;
+}
+
+.title-home h1 {
+    font-size: 100px;
+    font-family: Salsa;
 }
 
 
