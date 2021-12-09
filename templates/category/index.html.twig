@@ -14,7 +14,7 @@
                     <h2>Catégorie :</h2>
                 </div>
                 <div class="card-body">
-                    <h3 class="card-title">{{ category.name }}</h3>
+                    <h3 class="card-title">{{ loop.index }} / {{ category.name }}</h3>
                     <a href="{{ path('category_show', { categoryName: category.name }) }}"
                         class="btn btn-secondary p-2 px-4">
                         Voir</a>

@@ -28,7 +28,7 @@ class Episode
     private $number;
 
     /**
-     * @ORM\Column(type="text")
+     * @ORM\Column(type="text", nullable=true)
      */
     private $synopsis;
 
@@ -37,6 +37,11 @@ class Episode
      * @ORM\JoinColumn(nullable=false)
      */
     private $season;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $slug;
 
     public function getId(): ?int
     {
@@ -72,7 +77,7 @@ class Episode
         return $this->synopsis;
     }
 
-    public function setSynopsis(string $synopsis): self
+    public function setSynopsis(?string $synopsis): self
     {
         $this->synopsis = $synopsis;
 
@@ -87,6 +92,18 @@ class Episode
     public function setSeason(?Season $season): self
     {
         $this->season = $season;
+
+        return $this;
+    }
+
+    public function getSlug(): ?string
+    {
+        return $this->slug;
+    }
+
+    public function setSlug(string $slug): self
+    {
+        $this->slug = $slug;
 
         return $this;
     }

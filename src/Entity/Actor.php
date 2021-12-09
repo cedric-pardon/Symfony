@@ -20,14 +20,14 @@ class Actor
     private $id;
 
     /**
-     * @ORM\ManyToMany(targetEntity=Program::class, inversedBy="actors")
-     */
-    private $programs;
-
-    /**
      * @ORM\Column(type="string", length=255)
      */
     private $name;
+
+    /**
+     * @ORM\ManyToMany(targetEntity=Program::class, inversedBy="actors")
+     */
+    private $programs;
 
     public function __construct()
     {
@@ -37,6 +37,18 @@ class Actor
     public function getId(): ?int
     {
         return $this->id;
+    }
+
+    public function getName(): ?string
+    {
+        return $this->name;
+    }
+
+    public function setName(string $name): self
+    {
+        $this->name = $name;
+
+        return $this;
     }
 
     /**
@@ -61,22 +73,5 @@ class Actor
         $this->programs->removeElement($program);
 
         return $this;
-    }
-
-    public function getName(): ?string
-    {
-        return $this->name;
-    }
-
-    public function setName(string $name): self
-    {
-        $this->name = $name;
-
-        return $this;
-    }
-    public function getSelector(): string
-
-    {
-        return $this->getId() . ' - ' . $this->getName();
     }
 }

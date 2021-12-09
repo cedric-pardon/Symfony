@@ -1,9 +1,9 @@
 {% extends "base.html.twig" %}
 
-{% block title %} Catégorie {{ categoryName }}{% endblock %}
+{% block title %} Catégorie {{ category.name }}{% endblock %}
 
 {% block body %}
-<h1 class="text-center">Liste de la catégorie {{ categoryName }} : </h1>
+<h1 class="text-center">Liste de la catégorie {{ category.name }} : </h1>
 
 <main class="container">
     <div class="row justify-content-center gap-5">
@@ -17,7 +17,7 @@
                 <div class="card-body">
                     <h3 class="card-title">{{ program.title }} </h3>
                     <p>{{ program.summary }}</p>
-                    <a href="{{ path('program_show', { id: program.id }) }}" class="btn btn-secondary p-2 px-4">
+                    <a href="{{ path('program_show', { slug: program.slug }) }}" class="btn btn-secondary p-2 px-4">
                         Voir le détail</a>
                 </div>
             </div>

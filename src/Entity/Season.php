@@ -20,7 +20,7 @@ class Season
     private $id;
 
     /**
-     * @ORM\Column(type="integer", nullable=true)P
+     * @ORM\Column(type="integer")
      */
     private $number;
 
@@ -60,7 +60,7 @@ class Season
         return $this->number;
     }
 
-    public function setNumber(?int $number): self
+    public function setNumber(int $number): self
     {
         $this->number = $number;
 
