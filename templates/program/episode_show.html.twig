@@ -1,11 +1,33 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Épisode 
-	{{ episode.number}}
+{% block title %}Épisode
+{{ season.number}}
 {% endblock %}
 
 {% block body %}
-	<h1>Saison {{ season.number}} de {{ program.title }}, {{ season.year }}</h1>
-	<h2>Épisode {{ episode.number }}</h2>
-    <p>{{ episode.synopsis }}</p>
+<h1>Saison
+	{{ season.number}}
+	de
+	{{ program.title }},
+<h2>Épisode
+	{{ episode.number }}</h2>
+<p>{{ episode.synopsis }}</p>
+
+{% if is_granted('ROLE_CONTRIBUTOR') %}
+<div>
+	{{ form_start(form) }}
+	{{ form_widget(form) }}
+	<button class="btn btn-primary">{{ button_label|default('Save') }}</button>
+	{{ form_end(form) }}
+</div>
+{% endif %}
+
+	{% for comment in episode.comments %}
+	<div>
+	<p class="fw-3">{{ comment.author.email }}</p>
+	avis: {{ comment.comment }} - note: {{ comment.rate }} * - ({{ comment.date|date('Y/m/d H:i:s')}})
+	</div>
+	{% endfor %}
+
+	<a class="text-dark" href="{{ path('app_index') }}">Retour à l'accueil</a>
 {% endblock %}

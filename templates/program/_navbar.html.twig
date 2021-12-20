@@ -1,53 +1,54 @@
 <nav class="navbar navbar-expand-lg navbar-light bg-secondary">
-    <div class="container-fluid">
+	<div class="container-fluid">
 
-        <div class="navbarWild navbar-brand col col-lg-4">
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
-                data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
-                aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <img src="{{ asset('build/images/carbon_logo-delicious.svg') }}" alt="logo" width="30" height="30">
-            <a class="navbar-brand text-primary" href="/">Wild Séries</a>
-        </div>
+		<div class="navbarWild navbar-brand col col-lg-4">
+			<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+				<span class="navbar-toggler-icon"></span>
+			</button>
+			<img src="{{ asset('build/images/carbon_logo-delicious.svg') }}" alt="logo" width="30" height="30">
+			<a class="navbar-brand text-primary" href="/">Wild Séries</a>
+		</div>
 
-        <div class="collapse navbar-collapse col col-lg-4" id="navbarSupportedContent">
-            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                <li class="nav-item dropdown">
-                    <a class="nav-link" href="/program" id="navbarDropdown" role="button">
-                        Programmes
-                    </a>
-                <li class="nav-item dropdown">
-                    <a class="nav-link" href="/category" id="navbarDropdown" role="button">
-                        Catégories
-                    </a>
-                </li>
-                <li class="nav-item dropdown">
-                    <a class="nav-link" href="/actor" id="navbarDropdown" role="button">
-                        Acteurs
-                    </a>
-                </li>
-                </li>
-            </ul>
-        </div>
-        
-        <div class="collapse navbar-collapse col col-lg-4" id="navbarSupportedContent">
-            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                <li class="nav-item">
-                    <a class="nav-link text-primary" href="/program/new/#/">Ajout programme</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link text-primary" href="/episode/new/">Ajout épisode</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Déconnexion</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link disabled">John Doe</a>
-                </li>
-                <img src="{{ asset('build/images/vs_profile.svg') }}" alt="logo" width="30" height="30">
-            </ul>
-        </div>
+		<div class="collapse navbar-collapse col col-lg-4" id="navbarSupportedContent">
+			<ul class="navbar-nav me-auto mb-2 mb-lg-0">
+				<li class="nav-item dropdown">
+					<a class="nav-link" href="/program" id="navbarDropdown" role="button">
+						Programmes</a>
+				</li>
+				<li class="nav-item dropdown">
+					<a class="nav-link" href="/category" id="navbarDropdown" role="button">
+						Catégories
+					</a>
+				</li>
+				<li class="nav-item dropdown">
+					<a class="nav-link" href="/actor" id="navbarDropdown" role="button">
+						Acteurs
+					</a>
+				</li>
+			</li>
+		</ul>
+	</div>
 
-    </div>
+	<div class="collapse navbar-collapse col col-lg-4" id="navbarSupportedContent">
+		<ul class="navbar-nav me-auto mb-2 mb-lg-0">
+			<li class="nav-item">
+				<a class="nav-link text-primary" href="/program/new/#/">Ajout programme</a>
+			</li>
+			<li class="nav-item">
+				<a class="nav-link text-primary" href="/episode/new/">Ajout épisode</a>
+			</li>
+			<li class="nav-item">
+				{% if app.user %}
+					{{ app.user.email }}
+					<a class="text-dark" href="{{ path('app_logout') }}">
+						déconnexion</a>
+				{% else %}
+					<a class="text-dark" href="{{ path('login') }}">
+						connexion</a>
+				{% endif %}
+			</li>
+		</ul>
+	</div>
+</div>
+
 </nav>

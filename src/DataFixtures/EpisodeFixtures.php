@@ -66,6 +66,7 @@ class EpisodeFixtures extends Fixture implements DependentFixtureInterface
             $episode->setSlug($slug);
             $manager->persist($episode);
         }
+
         $manager->flush();
     }
 

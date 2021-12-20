@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Episode;
 use App\Form\EpisodeType;
+use App\Form\CommentType;
 use App\Repository\EpisodeRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -13,6 +14,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use App\Service\Slugify;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Email;
+use App\Entity\Comment;
 
 /**
  * @Route("/episode")
@@ -26,6 +28,31 @@ class EpisodeController extends AbstractController
     {
         return $this->render('episode/index.html.twig', [
             'episodes' => $episodeRepository->findAll(),
+        ]);
+    }
+
+    /**
+     * @Route("/{slug}/comment/new", name="comment_new", methods={"GET","POST"})
+     */
+
+    public function newComment(Request $request, Episode $episode): Response
+    {
+        $comment = new Comment();
+        $form = $this->createForm(CommentType::class, $comment);
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->persist($comment);
+            $comment->setAuthor($this->getUser());
+            $comment->setEpisode($episode);
+            $entityManager->flush();
+
+            return $this->redirectToRoute('program_index');
+        }
+
+        return $this->render('program/newComment.html.twig', [
+            'comment' => $comment,
+            'form' => $form->createView(),
         ]);
     }
 
@@ -73,8 +100,12 @@ class EpisodeController extends AbstractController
     /**
      * @Route("/{slug}/edit", name="episode_edit", methods={"GET", "POST"})
      */
-    public function edit(Request $request, Episode $episode, EntityManagerInterface $entityManager, Slugify $slugify): Response
-    {
+    public function edit(
+        Request $request,
+        Episode $episode,
+        EntityManagerInterface $entityManager,
+        Slugify $slugify
+    ): Response {
         $form = $this->createForm(EpisodeType::class, $episode);
         $form->handleRequest($request);
 

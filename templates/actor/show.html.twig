@@ -12,7 +12,7 @@
                 <div class="card-body">
                     <h2 class="card-title">{{ loop.index }} - {{ actor.name }}</h2>
                     <p class="card-title">Série - {{ program.title }}</p>
-                    <a class="btn btn-secondary p-2 px-4" href="{{ path('program_show', { slug: program.slug }) }}">Voir</a>
+                    <a class="btn btn-secondary p-2 px-4" href="{{ path('program_show', { slug: program.slug }) }}">{{ program.title }}</a>
                 </div>
             </div>
         </div>

@@ -16,7 +16,7 @@
     
     {% for actor in program.actors %}
     <div class="card">
-        <h4 href="{{ path('program_actor_show', { actor: actor.id }) }}">{{ actor.name }}</h4>
+        <h4 href="{{ path('actor_show', { id: actor.id }) }}">{{ loop.index }} - {{ actor.name }}</h4>
     </div>
     {% else %}
     Aucun acteur pour cette série.
@@ -33,7 +33,7 @@
                 <div class="card-body">
                     <p class="mt-0">{{ season.description }}</p>
                     <h4 class="card-title">{{ season.year }}</h4>
-                    <a href="{{ path('program_season_show', { season: season.id, slug: program.slug }) }}"
+                    <a href="{{ path('program_season_show',{ programId: season.program.id, seasonId: season.id }) }}"
                         class="btn btn-secondary p-2 px-4">
                         Voir le détail</a>
                 </div>

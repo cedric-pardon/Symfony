@@ -1,43 +1,46 @@
 <?php
 
 // src/Controller/ProgramController.php
+
 namespace App\Controller;
 
-use App\Entity\Episode;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
+use Symfony\Component\HttpFoundation\Request;
 use App\Entity\Program;
 use App\Entity\Season;
-use App\Entity\Actor;
-use Symfony\Component\HttpFoundation\Request;
+use App\Entity\Episode;
 use App\Form\ProgramType;
-use Doctrine\ORM\EntityManagerInterface;
 use App\Service\Slugify;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Email;
+use App\Entity\Comment;
+use App\Form\CommentType;
+use DateTime;
 
 /**
  * @Route("/program", name="program_")
  */
-
 class ProgramController extends AbstractController
 {
-
     /**
      * Show all rows from Program's entity
-     *
+     * 
      * @Route("/", name="index")
      * @return Response A response instance
      */
-
     public function index(): Response
     {
-        $programs = $this->getDoctrine()->getRepository(Program::class)->findAll();
+        $programs = $this->getDoctrine()
+            ->getRepository(Program::class)
+            ->findAll();
 
-        return $this->render('program/index.html.twig', [
-            'programs' => $programs,
-        ]);
+        return $this->render(
+            'program/index.html.twig',
+            ['programs' => $programs]
+        );
     }
 
     /**
@@ -45,11 +48,9 @@ class ProgramController extends AbstractController
      *
      * @Route("/new", name="new")
      */
-
     public function new(Request $request, Slugify $slugify, MailerInterface $mailer): Response
     {
         $program = new Program();
-
         $form = $this->createForm(ProgramType::class, $program);
         $form->handleRequest($request);
 
@@ -59,100 +60,79 @@ class ProgramController extends AbstractController
             $program->setSlug($slug);
             $entityManager->persist($program);
             $entityManager->flush();
+
             $email = (new Email())
                 ->from($this->getParameter('mailer_from'))
                 ->to('your_email@example.com')
                 ->subject('Une nouvelle série vient d\'être publiée !')
                 ->html($this->renderView('program/newProgramEmail.html.twig', ['program' => $program]));
-            $mailer->send($email);
 
+            $mailer->send($email);
             return $this->redirectToRoute('program_index');
         }
 
-        return $this->render('program/new.html.twig', ["form" => $form->createView()]);
-    }
-
-    /**
-     * Getting program by id
-     *
-     * @Route("/{slug}", name="show")
-     * @return Response
-     */
-
-    public function show(Program $program): Response
-    {
-        return $this->render('program/show.html.twig', ['program' => $program]);
-    }
-
-    /**
-     * Getting a season for a program by id
-     *
-     * @Route("/{slug}/seasons/{season<^[0-9]+$>}", name="season_show")
-     * @return Response
-     */
-
-    public function showSeason(
-        Program $program,
-        Season $season
-    ): Response {
-
-        return $this->render(
-            'program/season_show.html.twig',
-            [
-                'program' => $program,
-                'season' => $season
-            ]
-        );
-    }
-
-    /**
-     * Getting an actor by id
-     *
-     * @Route("/actor/{actor<^[0-9]+$>}", name="actor_show")
-     * @return Response
-     */
-
-    public function showActor(Actor $actor): Response
-    {
-
-        return $this->render(
-            'program/actor_show.html.twig',
-            [
-                'actor' => $actor
-            ]
-        );
-    }
-
-    /**
-     * @Route("/{id}/edit", name="program_edit", methods={"GET", "POST"})
-     */
-    public function edit(Request $request, Program $program, EntityManagerInterface $entityManager): Response
-    {
-        $form = $this->createForm(ProgramType::class, $program);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager->flush();
-
-            return $this->redirectToRoute('program_index', [], Response::HTTP_SEE_OTHER);
-        }
-
-        return $this->renderForm('program/edit.html.twig', [
-            'program' => $program,
-            'form' => $form,
+        return $this->render('program/new.html.twig', [
+            "form" => $form->createView(),
         ]);
     }
 
     /**
-     * @Route("/{slug}/delete", name="delete", methods={"POST"})
+     * @Route("/{slug}", name="show", methods={"GET"})
+     * @return Response
      */
-    public function delete(Request $request, Program $program, EntityManagerInterface $entityManager): Response
+    public function show(Program $program): Response
     {
-        if ($this->isCsrfTokenValid('delete' . $program->getId(), $request->request->get('_token'))) {
-            $entityManager->remove($program);
+        return $this->render('program/show.html.twig', [
+            'program' => $program,
+        ]);
+    }
+
+    /**
+     * getting a program by seasonId
+     *
+     * @Route("/{programId}/season/{seasonId}", name="season_show")
+     * @ParamConverter("program", class="App\Entity\Program", options={"mapping": {"programId": "id"}})
+     * @ParamConverter("season", class="App\Entity\Season", options={"mapping": {"seasonId": "id"}})
+     * @return Response
+     */
+    public function showSeason(Program $program, Season $season): Response
+    {
+        return $this->render('program/season_show.html.twig', [
+            'program' => $program,
+            'season' => $season,
+        ]);
+    }
+
+    /**
+     * getting a program by seasonId
+     *
+     * @Route("/{programId}/season/{seasonId}/episode/{episodeId}", name="episode_show")
+     * @ParamConverter("program", class="App\Entity\Program", options={"mapping": {"programId": "id"}})
+     * @ParamConverter("season", class="App\Entity\Season", options={"mapping": {"seasonId": "id"}})
+     * @ParamConverter("episode", class="App\Entity\Episode", options={"mapping": {"episodeId": "id"}})
+     * @return Response
+     */
+    public function showEpisode(Program $program, Season $season, Episode $episode, Request $request)
+    {
+        $comment = new Comment();
+        $form = $this->createForm(CommentType::class, $comment);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $entityManager = $this->getDoctrine()->getManager();
+            $comment->setEpisode($episode);
+            $comment->setAuthor($this->getUser());
+            $now = new DateTime('now');
+            $comment->setDate($now);
+            $entityManager->persist($comment);
             $entityManager->flush();
         }
 
-        return $this->redirectToRoute('program_index', [], Response::HTTP_SEE_OTHER);
+        return $this->render('program/episode_show.html.twig', [
+            'program' => $program,
+            'season' => $season,
+            'episode' => $episode,
+            'form' => $form->createView(),
+        ]);
     }
 }
