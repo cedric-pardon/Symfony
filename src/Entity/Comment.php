@@ -31,7 +31,7 @@ class Comment
      * @ORM\ManyToOne(targetEntity=User::class, inversedBy="comments")
      * @ORM\JoinColumn(nullable=false)
      */
-    private $user;
+    private $Author;
 
     /**
      * @ORM\ManyToOne(targetEntity=Episode::class, inversedBy="comments")
@@ -73,14 +73,14 @@ class Comment
         return $this;
     }
 
-    public function getUser(): ?User
+    public function getAuthor(): ?User
     {
         return $this->Author;
     }
 
-    public function setUser(?User $user): self
+    public function setAuthor(?User $Author): self
     {
-        $this->User = $user;
+        $this->Author = $Author;
 
         return $this;
     }

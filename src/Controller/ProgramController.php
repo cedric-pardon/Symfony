@@ -20,6 +20,8 @@ use App\Entity\Comment;
 use App\Form\CommentType;
 use DateTime;
 
+
+
 /**
  * @Route("/program", name="program_")
  */
@@ -39,8 +41,7 @@ class ProgramController extends AbstractController
 
         return $this->render(
             'program/index.html.twig',
-            ['programs' => $programs]
-        );
+            ['programs' => $programs]);
     }
 
     /**
@@ -48,7 +49,7 @@ class ProgramController extends AbstractController
      *
      * @Route("/new", name="new")
      */
-    public function new(Request $request, Slugify $slugify, MailerInterface $mailer): Response
+    public function new(Request $request, Slugify $slugify, MailerInterface $mailer) : Response
     {
         $program = new Program();
         $form = $this->createForm(ProgramType::class, $program);
@@ -62,12 +63,12 @@ class ProgramController extends AbstractController
             $entityManager->flush();
 
             $email = (new Email())
-                ->from($this->getParameter('mailer_from'))
-                ->to('your_email@example.com')
-                ->subject('Une nouvelle série vient d\'être publiée !')
-                ->html($this->renderView('program/newProgramEmail.html.twig', ['program' => $program]));
+            ->from($this->getParameter('mailer_from'))
+            ->to('your_email@example.com')
+            ->subject('Une nouvelle série vient d\'être publiée !')
+            ->html($this->renderView('program/newProgramEmail.html.twig', ['program' => $program]));
 
-            $mailer->send($email);
+        $mailer->send($email);
             return $this->redirectToRoute('program_index');
         }
 
@@ -76,6 +77,7 @@ class ProgramController extends AbstractController
         ]);
     }
 
+    
     /**
      * @Route("/{slug}", name="show", methods={"GET"})
      * @return Response
@@ -88,30 +90,30 @@ class ProgramController extends AbstractController
     }
 
     /**
-     * getting a program by seasonId
-     *
-     * @Route("/{programId}/season/{seasonId}", name="season_show")
-     * @ParamConverter("program", class="App\Entity\Program", options={"mapping": {"programId": "id"}})
-     * @ParamConverter("season", class="App\Entity\Season", options={"mapping": {"seasonId": "id"}})
-     * @return Response
-     */
+    * getting a program by seasonId
+    *
+    * @Route("/{programId}/season/{seasonId}", name="season_show")
+    * @ParamConverter("program", class="App\Entity\Program", options={"mapping": {"programId": "id"}})
+    * @ParamConverter("season", class="App\Entity\Season", options={"mapping": {"seasonId": "id"}})
+    * @return Response
+    */
     public function showSeason(Program $program, Season $season): Response
     {
-        return $this->render('program/season_show.html.twig', [
-            'program' => $program,
-            'season' => $season,
-        ]);
+    return $this->render('program/season_show.html.twig', [
+        'program' => $program,
+        'season' => $season,
+    ]);
     }
 
     /**
-     * getting a program by seasonId
-     *
-     * @Route("/{programId}/season/{seasonId}/episode/{episodeId}", name="episode_show")
-     * @ParamConverter("program", class="App\Entity\Program", options={"mapping": {"programId": "id"}})
-     * @ParamConverter("season", class="App\Entity\Season", options={"mapping": {"seasonId": "id"}})
-     * @ParamConverter("episode", class="App\Entity\Episode", options={"mapping": {"episodeId": "id"}})
-     * @return Response
-     */
+    * getting a program by seasonId
+    *
+    * @Route("/{programId}/season/{seasonId}/episode/{episodeId}", name="episode_show")
+    * @ParamConverter("program", class="App\Entity\Program", options={"mapping": {"programId": "id"}})
+    * @ParamConverter("season", class="App\Entity\Season", options={"mapping": {"seasonId": "id"}})
+    * @ParamConverter("episode", class="App\Entity\Episode", options={"mapping": {"episodeId": "id"}})
+    * @return Response
+    */
     public function showEpisode(Program $program, Season $season, Episode $episode, Request $request)
     {
         $comment = new Comment();
@@ -126,6 +128,7 @@ class ProgramController extends AbstractController
             $comment->setDate($now);
             $entityManager->persist($comment);
             $entityManager->flush();
+
         }
 
         return $this->render('program/episode_show.html.twig', [
