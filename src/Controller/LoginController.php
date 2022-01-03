@@ -14,11 +14,23 @@ class LoginController extends AbstractController
      */
     public function index(AuthenticationUtils $authenticationUtils): Response
     {
+        // get the login error if there is one
         $error = $authenticationUtils->getLastAuthenticationError();
+
+        // last username entered by the user
         $lastUsername = $authenticationUtils->getLastUsername();
+
         return $this->render('login/index.html.twig', [
             'last_username' => $lastUsername,
             'error'         => $error,
         ]);
-    }    
+    }
+
+    /**
+     * @Route("/profile", name="profile")
+     */
+    public function profile()
+    {
+        return $this->render('login/my_profile.html.twig');
+    }
 }

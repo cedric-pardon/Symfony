@@ -1,0 +1,11 @@
+{% extends "base.html.twig" %}
+{% block title %}
+	Mon compte
+{% endblock %}
+
+{% block body %}
+	<h1>Salut ça va</h1>
+	<h2>{{ app.user.email }}</h2>
+	<a class="btn btn-mb text-light bg-secondary me-4" href="{{ path('app_logout') }}">
+		Se déconnecter</a>
+{% endblock %}
