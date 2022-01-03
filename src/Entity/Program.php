@@ -11,7 +11,9 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=ProgramRepository::class)
- * @UniqueEntity("title")
+ * @UniqueEntity(fields="title", message="ce titre existe déjà")
+ * @ORM\Entity
+ * @UniqueEntity("slug")
  */
 class Program
 {
@@ -60,6 +62,11 @@ class Program
      * @ORM\Column(type="string", length=255)
      */
     private $slug;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="programs")
+     */
+    private $owner;
 
     public function __construct()
     {
@@ -141,7 +148,6 @@ class Program
     public function removeSeason(Season $season): self
     {
         if ($this->seasons->removeElement($season)) {
-            // set the owning side to null (unless already changed)
             if ($season->getProgram() === $this) {
                 $season->setProgram(null);
             }
@@ -185,6 +191,18 @@ class Program
     public function setSlug(string $slug): self
     {
         $this->slug = $slug;
+
+        return $this;
+    }
+
+    public function getOwner(): ?User
+    {
+        return $this->owner;
+    }
+
+    public function setOwner(?User $owner): self
+    {
+        $this->owner = $owner;
 
         return $this;
     }

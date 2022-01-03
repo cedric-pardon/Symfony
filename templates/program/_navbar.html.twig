@@ -2,7 +2,9 @@
 	<div class="container-fluid">
 
 		<div class="navbarWild navbar-brand col col-lg-4">
-			<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+			<button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+				data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+				aria-label="Toggle navigation">
 				<span class="navbar-toggler-icon"></span>
 			</button>
 			<img src="{{ asset('build/images/carbon_logo-delicious.svg') }}" alt="logo" width="30" height="30">
@@ -25,30 +27,30 @@
 						Acteurs
 					</a>
 				</li>
-			</li>
-		</ul>
-	</div>
+				</li>
+			</ul>
+		</div>
 
-	<div class="collapse navbar-collapse col col-lg-4" id="navbarSupportedContent">
-		<ul class="navbar-nav me-auto mb-2 mb-lg-0">
-			<li class="nav-item">
-				<a class="nav-link text-primary" href="/program/new/#/">Ajout programme</a>
-			</li>
-			<li class="nav-item">
-				<a class="nav-link text-primary" href="/episode/new/">Ajout épisode</a>
-			</li>
-			<li class="nav-item">
-				{% if app.user %}
+		<div class="collapse navbar-collapse col col-lg-4" id="navbarSupportedContent">
+			<ul class="navbar-nav me-auto mb-2 mb-lg-0">
+				<li class="nav-item">
+					<a class="nav-link text-primary" href="/program/new/#/">Ajout programme</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link text-primary" href="/episode/new/">Ajout épisode</a>
+				</li>
+				<li class="nav-item">
+					{% if app.user %}
 					{{ app.user.email }}
 					<a class="text-dark" href="{{ path('app_logout') }}">
 						déconnexion</a>
-				{% else %}
+					{% else %}
 					<a class="text-dark" href="{{ path('login') }}">
 						connexion</a>
-				{% endif %}
-			</li>
-		</ul>
+					{% endif %}
+				</li>
+			</ul>
+		</div>
 	</div>
-</div>
 
 </nav>

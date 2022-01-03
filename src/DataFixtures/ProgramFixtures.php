@@ -2,11 +2,12 @@
 
 namespace App\DataFixtures;
 
+use App\Service\Slugify;
 use App\Entity\Program;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
-use App\Service\Slugify;
+use Symfony\Component\String\Slugger\SluggerInterface;
 
 class ProgramFixtures extends Fixture implements DependentFixtureInterface
 {
@@ -68,7 +69,6 @@ class ProgramFixtures extends Fixture implements DependentFixtureInterface
             $program = new Program();
 
             $program->setTitle($programName['title']);
-            // $program->setYear($programName['year']);
             $program->setSummary($programName['summary']);
             $program->setPoster($programName['poster']);
             $program->setCategory($this->getReference($programName['category']));

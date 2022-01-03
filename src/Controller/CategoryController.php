@@ -9,6 +9,7 @@ use App\Entity\Category;
 use App\Entity\Program;
 use App\Form\CategoryType;
 use Symfony\Component\HttpFoundation\Request;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 
 /**
  * @Route("/category", name="category_")
@@ -32,22 +33,31 @@ class CategoryController extends AbstractController
 
     /**
      * The controller for the category add form
-     *
      * @Route("/new", name="new")
+     * @IsGranted("ROLE_ADMIN")
      */
 
     public function new(Request $request): Response
     {
+        // Create a new Category Object
         $category = new Category();
+        // Create the associated Form
         $form = $this->createForm(CategoryType::class, $category);
+        // Get data from HTTP request
         $form->handleRequest($request);
-
+        // Was the form submitted ?
         if ($form->isSubmitted() && $form->isValid()) {
+            // Deal with the submitted data
+            // Get the Entity Manager
             $entityManager = $this->getDoctrine()->getManager();
+            // Persist Category Object
             $entityManager->persist($category);
+            // Flush the persisted object
             $entityManager->flush();
+            // Finally redirect to categories list
             return $this->redirectToRoute('category_index');
         }
+        // Render the form
         return $this->render('category/new.html.twig', ["form" => $form->createView()]);
     }
     /**
@@ -63,7 +73,7 @@ class CategoryController extends AbstractController
 
         if (!$category) {
             throw $this->createNotFoundException(
-                'Pas de catégorie ' . $categoryName
+                'pas de catégorie ' . $categoryName . ' ici.'
             );
         }
         $programs = $this->getDoctrine()->getRepository(Program::class)->findBy(
@@ -71,6 +81,7 @@ class CategoryController extends AbstractController
             ['id' => 'DESC'],
             3
         );
+
         return $this->render('category/show.html.twig', ['category' => $category, 'programs' => $programs]);
     }
 }
